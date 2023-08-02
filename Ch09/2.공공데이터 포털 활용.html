@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. 공공데이터 포털</title>
+    <!--
+        날짜 : 2023/08/02
+        이름 : 한상민
+        내용 : 공공데이터포털 실습하기
+
+        참조 사이트
+         - 공공데이터포털 : https://www.data.go.kr/
+            - 일반 인증키(Encoding) : ZJHygqUoTVb9wp3kFheg4KC6k%2FQp0v%2Fy%2FHKw5roXg4LIeN6TXV%2FttyUPQkODa42VvztvkJ8MDNuqtRN0dyWmog%3D%3D
+            - 일반 인증키(Decoding) : ZJHygqUoTVb9wp3kFheg4KC6k/Qp0v/y/HKw5roXg4LIeN6TXV/ttyUPQkODa42VvztvkJ8MDNuqtRN0dyWmog==
+    -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b1f8551a9518eee15ecc05b1a6e2786a"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script>
+        $(function(){
+
+            // 지도 ////////////////////////////////////////////////////////////////////////////////////
+            var mapContainer = document.getElementById('map1'), // 지도를 표시할 div 
+            mapOption = { 
+                center: new kakao.maps.LatLng(36.519642367773535, 127.81745586569943), // 지도의 중심좌표
+                level: 13 // 지도의 확대 레벨
+            };
+            
+            // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+            var map = new kakao.maps.Map(mapContainer, mapOption); 
+
+            $.ajax({
+                url: 'https://apis.data.go.kr/B551011/GoCamping/basedList?numOfRows=200&MobileOS=ETC&MobileApp=%ED%85%8C%EC%8A%A4%ED%8A%B8&serviceKey=ZJHygqUoTVb9wp3kFheg4KC6k%2FQp0v%2Fy%2FHKw5roXg4LIeN6TXV%2FttyUPQkODa42VvztvkJ8MDNuqtRN0dyWmog%3D%3D&_type=json',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data){
+                    console.log(data.response.body.items.item);
+
+                    const items = data.response.body.items.item;
+
+                    for(let item of items) {
+                        console.log(item.facltNm);
+
+                        var marker = new kakao.maps.Marker({
+                            map: map,
+                            position: new kakao.maps.LatLng(item.mapY, item.mapX),
+                            title : item.facltNm
+                        });
+
+                        marker.setMap(map);
+                    }
+                }
+            }); // ajax end.....
+        }); // window end....
+
+    </script>
+</head>
+<body>
+    <h3>2. 공공데이터 활용 실습</h3>
+
+    <h4>전국 캠핑장</h4>
+    <div id="map1" style="width:1200px;height:800px;"></div>
+    
+</body>
+</html>

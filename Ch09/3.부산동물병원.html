@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b1f8551a9518eee15ecc05b1a6e2786a"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script>
+        window.onload = function(){
+            // 동물병원 ////////////////////////////////////////////////////////////////////////////////////
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = { 
+                center: new kakao.maps.LatLng(35.15315122773328, 129.1189069749588), // 지도의 중심좌표
+                level: 9 // 지도의 확대 레벨
+            };
+            
+            // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+            var map = new kakao.maps.Map(mapContainer, mapOption); 
+
+            const url = 'https://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=ZJHygqUoTVb9wp3kFheg4KC6k%2FQp0v%2Fy%2FHKw5roXg4LIeN6TXV%2FttyUPQkODa42VvztvkJ8MDNuqtRN0dyWmog%3D%3D&pageNo=1&numOfRows=300&resultType=json';
+            fetch(url)
+                .then((res)=>res.json())
+                .then((data) => {
+                    console.log(data.getTblAnimalHospital.body.items.item);
+
+                    const items = data.getTblAnimalHospital.body.items.item;
+
+                    for(let item of items) {
+                        console.log(item.anmal_hospital);
+
+                        var marker = new kakao.maps.Marker({
+                            map: map,
+                            position: new kakao.maps.LatLng(item.lat, item.lon),
+                            title : item.anmal_hospital
+                        });
+
+                        marker.setMap(map);
+                    }
+                });
+        };
+    </script>
+</head>
+<body>
+    <h3>2. 공공데이터 활용 실습</h3>
+
+    <h4>부산 동물병원 위치</h4>
+    <div id="map" style="width:1200px;height:800px;"></div>
+    
+</body>
+</html>
